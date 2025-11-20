@@ -1,0 +1,80 @@
+@startuml
+hide empty methods
+skinparam noteBackgroundColor #EAEAEA
+
+title Badginator-Schema, Revision: 0
+
+class "**Badge**" as Badge  #FFFFFF {
+  id UUID
+  name string
+  description string
+  caption string
+  states []BadgeState
+}
+
+
+
+note top of Badge
+   Basic definition of a
+  badge
+end note
+
+class "**BadgeState**" as BadgeState  #FFFFFF {
+  id UUID
+  color string
+  caption string
+  badgeSvg string
+}
+
+
+
+note top of BadgeState
+   State that a badge can
+  be in
+end note
+
+class "**TargetObj**" as TargetObj  #FFFFFF {
+  id UUID
+  name string
+  description string
+  badges []ObjBadge
+}
+
+
+
+note top of TargetObj
+   Object that receives the
+  badge
+end note
+
+class "**ObjBadge**" as ObjBadge  #FFFFFF {
+  badgeId UUID
+  states []ObjBadgeState
+}
+
+
+
+note top of ObjBadge
+   badges assigned to an
+  object
+end note
+
+class "**ObjBadgeState**" as ObjBadgeState  #FFFFFF {
+  date DateTime
+  revision string
+  stateRef UUID
+}
+
+
+
+note top of ObjBadgeState
+   state enty for an
+  assigned badge
+end note
+Badge -- "0..n" BadgeState
+TargetObj -- "0..n" ObjBadge
+ObjBadge -- "0..n" ObjBadgeState
+ObjBadge .. Badge
+ObjBadgeState .. BadgeState
+
+@enduml
