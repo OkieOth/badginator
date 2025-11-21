@@ -1,0 +1,127 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Badginator Business Model",
+  "description": "Business model of the badginator project",
+  "version": "0.1.0",
+  "definitions": {
+    "Badge": {
+      "type": "object",
+      "description": "Basic definition of a badge",
+      "properties": {
+        "id": {
+          "description": "primary key",
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "description": "Name of the badge",
+          "type": "string"
+        },
+        "description": {
+          "description": "Some more words to explain the badge",
+          "type": "string"
+        },
+        "caption": {
+          "description": "Caption printed on the badge",
+          "type": "string"
+        },
+        "states": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BadgeState"
+          }
+        }
+      },
+      "x-tags": ["hort.main-type"]
+    },
+    "BadgeState": {
+      "type": "object",
+      "description": "State that a badge can be in",
+      "properties": {
+        "id": {
+          "description": "primary key, needed for references",
+          "type": "string",
+          "format": "uuid"
+        },
+        "color": {
+          "description": "color that is displayed for this state",
+          "type": "string"
+        },
+        "caption": {
+          "description": "text that's printed in the state",
+          "type": "string"
+        },
+        "badgeSvg": {
+          "description": "SVG object rendered for this state",
+          "type": "string"
+        }
+      }
+    },
+    "TargetObj": {
+      "type": "object",
+      "description": "Object that receives the badge",
+      "properties": {
+        "id": {
+          "description": "unique identifier of the object",
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "description": "name of the object",
+          "type": "string"
+        },
+        "description": {
+          "description": "Some more words about the object",
+          "type": "string"
+        },
+        "badges": {
+          "description": "badges that belong to the object",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ObjBadge"
+          }
+        }
+      },
+      "x-tags": ["hort.main-type"]
+    },
+    "ObjBadge": {
+      "description": "badges assigned to an object",
+      "type": "object",
+      "properties": {
+        "badgeId": {
+          "description": "reference to the provided badge",
+          "type": "string",
+          "format": "uuid",
+          "x-ref": "#/definitions/Badge"
+        },
+        "states": {
+          "description": "list of badge states assigned to this object",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ObjBadgeState"
+          }
+        }
+      }
+    },
+    "ObjBadgeState": {
+      "description": "state enty for an assigned badge",
+      "type": "object",
+      "properties": {
+        "date": {
+          "description": "when was this state assigned",
+          "type": "string",
+          "format": "date-time"
+        },
+        "revision": {
+          "description": "if one object can have multiple budget states, based on revisions, e.g. by commit ID",
+          "type": "string"
+        },
+        "stateRef": {
+          "type": "string",
+          "format": "uuid",
+          "x-ref": "#/definitions/BadgeState.id"
+        }
+      }
+    }
+  }
+}
