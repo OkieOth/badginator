@@ -21,5 +21,9 @@ then the execution time is really slow - stay patient!
 
 ![Model](./docs/puml/badginator_model.svg)
 
+# Configuration
+
+![Config Model](./docs/puml/config_model.svg)
+
 # Logo
 Special thanks to the sponsor of the nice logo: https://github.com/plathub

@@ -2,7 +2,7 @@
 hide empty methods
 skinparam noteBackgroundColor #EAEAEA
 
-title Badginator-Schema, Revision: 0
+title Badginator Domain Model, Revision: 0
 
 class "**Badge**" as Badge  #FFFFFF {
   id UUID
@@ -50,6 +50,7 @@ end note
 class "**ObjBadge**" as ObjBadge  #FFFFFF {
   badgeId UUID
   states []ObjBadgeState
+  statesByRev []ObjBadgeState
 }
 
 
@@ -62,6 +63,7 @@ end note
 class "**ObjBadgeState**" as ObjBadgeState  #FFFFFF {
   date DateTime
   revision string
+  caption string
   stateRef UUID
 }
 
