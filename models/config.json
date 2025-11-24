@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "badginator configuration model",
+  "description": "The schema defines the model used by the configuration file of the program",
+  "version": "0.1.0",
+  "type": "object",
+  "properties": {
+    "server": {
+      "$ref": "#/definitions/Server"
+    },
+    "storage": {
+      "$ref": "#/definitions/Storage"
+    }
+  },
+  "definitions": {
+    "Server": {
+      "type": "object",
+      "description": "Container object for all configuration of the 'serve' sub command",
+      "properties": {
+        "port": {
+          "description": "Port the server should listen to",
+          "type": "integer"
+        }
+      }
+    },
+    "Storage": {
+      "type": "object",
+      "description": "Container object for all storage configurations",
+      "properties": {
+        "sqlite": {
+          "description": "sqlite configuration",
+          "$ref": "#/definitions/Sqlite"
+        }
+      }
+    },
+    "Sqlite": {
+      "type": "object",
+      "description": "Configurations for the sqlite storage backend",
+      "properties": {
+        "file": {
+          "description": "file for the used sqlite database",
+          "type": "string"
+        }
+      }
+    }
+  }
+}

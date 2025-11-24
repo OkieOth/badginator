@@ -1,0 +1,122 @@
+openapi: 3.1.3
+
+info:
+    title: Badge Service API
+    version: "1.0.0"
+    description: API for retrieving and updating SVG badges.
+
+servers:
+    - url: https://api.example.com
+      description: Production server
+
+paths:
+    /badge/{OBJECT_NAME}/{BADGE_NAME}:
+        get:
+            summary: Delivers the related SVG badge for this object
+            description: Delivers the related SVG badge for this object
+            parameters:
+                - $ref: "#/components/parameters/OBJECT_NAME"
+                - $ref: "#/components/parameters/BADGE_NAME"
+            responses:
+                "200":
+                    description: SVG badge image
+                    content:
+                        image/svg+xml:
+                            schema:
+                                type: string
+                                description: Raw SVG XML as a string
+
+        put:
+            summary: Creates or updates the SVG badge for this object
+            description: Creates or updates the SVG badge for this object
+            parameters:
+                - $ref: "#/components/parameters/OBJECT_NAME"
+                - $ref: "#/components/parameters/BADGE_NAME"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/PutBadgePayload"
+            responses:
+                "200":
+                    description: Badge updated
+                "201":
+                    description: Badge created
+
+    /badge/{OBJECT_NAME}/{REVISION}/{BADGE_NAME}:
+        get:
+            summary: Delivers the related SVG badge for this object and the given revision
+            description: Delivers the related SVG badge for this object and the given revision
+            parameters:
+                - $ref: "#/components/parameters/OBJECT_NAME"
+                - $ref: "#/components/parameters/BADGE_NAME"
+                - $ref: "#/components/parameters/REVISION"
+            responses:
+                "200":
+                    description: SVG badge image
+                    content:
+                        image/svg+xml:
+                            schema:
+                                type: string
+                                description: Raw SVG XML as a string
+
+        put:
+            summary: Creates or updates the SVG badge for the given revision
+            description: Creates or updates the SVG badge for the given revision
+            parameters:
+                - $ref: "#/components/parameters/OBJECT_NAME"
+                - $ref: "#/components/parameters/BADGE_NAME"
+                - $ref: "#/components/parameters/REVISION"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/PutBadgePayload"
+            responses:
+                "200":
+                    description: Badge revision updated
+                "201":
+                    description: Badge revision created
+
+components:
+    parameters:
+        OBJECT_NAME:
+            name: OBJECT_NAME
+            in: path
+            required: true
+            description: Name of the object the badge belongs to
+            schema:
+                type: string
+
+        BADGE_NAME:
+            name: BADGE_NAME
+            in: path
+            required: true
+            description: Name of the badge
+            schema:
+                type: string
+
+        REVISION:
+            name: REVISION
+            in: path
+            required: true
+            description: Revision identifier of the badge
+            schema:
+                type: string
+
+    schemas:
+        PutBadgePayload:
+            type: object
+            description: Payload for creating or updating a badge
+            properties:
+                stateId:
+                    type: string
+                    format: uuid
+                    description: configured ID of the state to set
+                caption:
+                    description: alternative text for the state to set
+                    type: string
+            required:
+                - stateId
