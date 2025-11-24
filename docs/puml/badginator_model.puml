@@ -2,7 +2,7 @@
 hide empty methods
 skinparam noteBackgroundColor #EAEAEA
 
-title Badginator-Schema, Revision: 0
+title Badginator Domain Model, Revision: 0
 
 class "**Badge**" as Badge  #FFFFFF {
   id UUID
@@ -15,8 +15,8 @@ class "**Badge**" as Badge  #FFFFFF {
 
 
 note top of Badge
-   Basic definition of a
-  badge
+   Basic definition of
+  a badge
 end note
 
 class "**BadgeState**" as BadgeState  #FFFFFF {
@@ -29,8 +29,8 @@ class "**BadgeState**" as BadgeState  #FFFFFF {
 
 
 note top of BadgeState
-   State that a badge can
-  be in
+   State that a badge
+  can be in
 end note
 
 class "**TargetObj**" as TargetObj  #FFFFFF {
@@ -43,25 +43,27 @@ class "**TargetObj**" as TargetObj  #FFFFFF {
 
 
 note top of TargetObj
-   Object that receives the
-  badge
+   Object that
+  receives the badge
 end note
 
 class "**ObjBadge**" as ObjBadge  #FFFFFF {
   badgeId UUID
   states []ObjBadgeState
+  statesByRev []ObjBadgeState
 }
 
 
 
 note top of ObjBadge
-   badges assigned to an
-  object
+   badges assigned to
+  an object
 end note
 
 class "**ObjBadgeState**" as ObjBadgeState  #FFFFFF {
   date DateTime
   revision string
+  caption string
   stateRef UUID
 }
 

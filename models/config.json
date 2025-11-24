@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "badginator configuration model",
+  "title": "app config",
   "description": "The schema defines the model used by the configuration file of the program",
   "version": "0.1.0",
   "type": "object",
@@ -10,16 +10,35 @@
     },
     "storage": {
       "$ref": "#/definitions/Storage"
+    },
+    "logging": {
+      "$ref": "#/definitions/Logging"
     }
   },
   "definitions": {
+    "Logging": {
+      "type": "object",
+      "properties": {
+        "logLevel": {
+          "type": "string",
+          "enum": ["debug", "info", "error"],
+          "default": "info"
+        },
+        "output": {
+          "description": "defines the destination for the log output",
+          "type": "string",
+          "default": "stdout"
+        }
+      }
+    },
     "Server": {
       "type": "object",
       "description": "Container object for all configuration of the 'serve' sub command",
       "properties": {
         "port": {
           "description": "Port the server should listen to",
-          "type": "integer"
+          "type": "integer",
+          "default": 8080
         }
       }
     },

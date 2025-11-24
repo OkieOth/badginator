@@ -1,0 +1,77 @@
+@startuml
+hide empty methods
+skinparam noteBackgroundColor #EAEAEA
+
+title Persons-Schema, Revision: 0
+
+class "**Logging**" as Logging  #FFFFFF {
+  logLevel LoggingLogLevel
+  output string
+}
+
+
+
+class "**Server**" as Server  #FFFFFF {
+  port int
+}
+
+
+
+note top of Server
+   Container object
+  for all
+  configuration of the
+  'serve' sub command
+end note
+
+class "**Storage**" as Storage  #FFFFFF {
+  sqlite Sqlite
+}
+
+
+
+note top of Storage
+   Container object
+  for all storage
+  configurations
+end note
+
+class "**Sqlite**" as Sqlite  #FFFFFF {
+  file string
+}
+
+
+
+note top of Sqlite
+   Configurations for
+  the sqlite storage
+  backend
+end note
+
+class "**AppConfig**" as AppConfig  #FFFFFF {
+  server Server
+  storage Storage
+  logging Logging
+}
+
+
+
+note top of AppConfig
+   The schema defines
+  the model used by
+  the configuration
+  file of the program
+end note
+
+enum "**LoggingLogLevel**" as LoggingLogLevel #FFFFFF {
+  debug
+  info
+  error
+}
+Logging --  LoggingLogLevel
+Storage --  Sqlite
+AppConfig --  Server
+AppConfig --  Storage
+AppConfig --  Logging
+
+@enduml

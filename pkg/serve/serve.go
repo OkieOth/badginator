@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"log/slog"
 	"net/http"
 	"os"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/okieoth/badginator/pkg/config"
 )
 
 // --- Data Models ---
@@ -107,11 +109,31 @@ func PutBadgeRevision(w http.ResponseWriter, r *http.Request) {
 }
 
 // --- Server Setup ---
-
-func Start(port int) {
-	// initialize slog logger
-	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+func initLogger(cfg config.AppConfig) {
+	var writer io.Writer
+	if cfg.Logging.Output == "" || cfg.Logging.Output == "stdout" {
+		writer = os.Stdout
+	} else {
+		f, err := os.OpenFile(cfg.Logging.Output, os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			log.Panicf("can't open logfile (%s): %v", cfg.Logging.Output, err)
+		}
+		writer = f
+	}
+	logger := slog.New(slog.NewTextHandler(writer, nil))
+	switch cfg.Logging.LogLevel {
+	case config.LoggingLogLevel_debug:
+		slog.SetLogLoggerLevel(slog.LevelDebug)
+	case config.LoggingLogLevel_info:
+		slog.SetLogLoggerLevel(slog.LevelInfo)
+	case config.LoggingLogLevel_error:
+		slog.SetLogLoggerLevel(slog.LevelError)
+	}
 	slog.SetDefault(logger)
+}
+
+func Start(cfg config.AppConfig) {
+	// initialize slog logger
 
 	r := chi.NewRouter()
 
@@ -121,6 +143,6 @@ func Start(port int) {
 	r.Get("/badge/{OBJECT_NAME}/{REVISION}/{BADGE_NAME}", GetBadgeRevision)
 	r.Put("/badge/{OBJECT_NAME}/{REVISION}/{BADGE_NAME}", PutBadgeRevision)
 
-	slog.Info("Badge Service API running", "port", port)
-	http.ListenAndServe(fmt.Sprintf(":%d", port), r)
+	slog.Info("Badge Service API running", "port", cfg.Server.Port)
+	http.ListenAndServe(fmt.Sprintf(":%d", cfg.Server.Port), r)
 }
